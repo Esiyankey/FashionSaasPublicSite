@@ -12,7 +12,7 @@ export function LimitedOffer() {
       }}
     >
       {/* Overlay gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-50/90 to-gray-50"></div>
+      <div className="absolute inset-0 bg-linear-to-r from-transparent via-gray-50/90 to-gray-50"></div>
 
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
