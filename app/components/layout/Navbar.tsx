@@ -38,7 +38,7 @@ export default function Navbar() {
       {showBanner && (
         <div className="bg-amber-950 text-amber-100 px-4 py-2 flex items-center justify-between text-sm h-[40px]">
           <span className="font-medium">Support (406) 555-0120</span>
-          <div className="flex items-center gap-2">
+          <div className=" hidden md:flex items-center gap-2">
             <span>Sign up and <span className="font-bold">GET 25% OFF</span></span>
             <a href="#" className="font-semibold hover:underline">Sign up now</a>
           </div>
