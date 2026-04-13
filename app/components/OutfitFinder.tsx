@@ -258,7 +258,7 @@ export function OutfitFinder() {
 
           {/* Center - Outfit Preview */}
           <div className="lg:col-span-1 flex justify-center">
-            <div className="bg-gray-300  overflow-hidden w-full max-w-sm h-96 md:h-[520px]">
+            <div className="bg-gray-300  overflow-hidden w-full max-w-sm h-96 md:h-[650px]">
               <img
                 src={currentOutfit.image}
                 alt={currentOutfit.title}
@@ -273,7 +273,7 @@ export function OutfitFinder() {
           </div>
 
           {/* Right Sidebar - Product Details */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1/2">
             <Badge className="bg-amber-100 text-amber-700 mb-4">
               {currentOutfit.category}
             </Badge>

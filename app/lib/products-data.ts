@@ -2,7 +2,7 @@ export interface Product {
   id: number;
   name: string;
   category: string;
-  productType: 'Women' | 'Men' | 'Accessories';
+  productType: 'dress' | 'shirt' |'skirt'| 'accessory';
   price: number;
   originalPrice: number;
   discount: number;
@@ -16,8 +16,8 @@ export const products: Product[] = [
   {
     id: 1,
     name: 'Floral Summer Dress',
-    category: 'Dresses',
-    productType: 'Women',
+    category: 'Women',
+    productType: 'dress',
     price: 75,
     originalPrice: 150,
     discount: 50,
@@ -28,8 +28,8 @@ export const products: Product[] = [
   {
     id: 2,
     name: 'Boho Chic Gown',
-    category: 'Dresses',
-    productType: 'Women',
+    category: 'Women',
+    productType: 'dress',
     price: 165,
     originalPrice: 220,
     discount: 25,
@@ -39,8 +39,8 @@ export const products: Product[] = [
   {
     id: 3,
     name: 'Evening Silk Dress',
-    category: 'Dresses',
-    productType: 'Women',
+    category: 'Women',
+    productType: 'dress',
     price: 90,
     originalPrice: 100,
     discount: 10,
@@ -50,8 +50,8 @@ export const products: Product[] = [
   {
     id: 4,
     name: 'Casual Day Dress',
-    category: 'Dresses',
-    productType: 'Women',
+    category: 'Women',
+    productType: 'dress',
     price: 75,
     originalPrice: 150,
     discount: 25,
@@ -63,8 +63,8 @@ export const products: Product[] = [
   {
     id: 5,
     name: 'Urban Streetwear Set',
-    category: 'Outfits',
-    productType: 'Men',
+    category: 'Men',
+    productType: 'shirt',
     price: 120,
     originalPrice: 180,
     discount: 33,
@@ -74,8 +74,8 @@ export const products: Product[] = [
   {
     id: 6,
     name: 'Classic Casual Look',
-    category: 'Outfits',
-    productType: 'Men',
+    category: 'Men',
+    productType: 'shirt',
     price: 45,
     originalPrice: 75,
     discount: 40,
@@ -85,8 +85,8 @@ export const products: Product[] = [
   {
     id: 7,
     name: 'Premium Autumn Outfit',
-    category: 'Outfits',
-    productType: 'Men',
+    category: 'Men',
+    productType: 'shirt',
     price: 185,
     originalPrice: 280,
     discount: 34,
@@ -96,8 +96,8 @@ export const products: Product[] = [
   {
     id: 8,
     name: 'Modern Minimalist Style',
-    category: 'Outfits',
-    productType: 'Men',
+    category: 'Men',
+    productType: 'shirt',
     price: 65,
     originalPrice: 95,
     discount: 32,
@@ -109,8 +109,8 @@ export const products: Product[] = [
   {
     id: 9,
     name: 'Leather Designer Wallet',
-    category: 'Wallets',
-    productType: 'Accessories',
+    category: 'Accessories',
+    productType: 'accessory',
     price: 35,
     originalPrice: 60,
     discount: 42,
@@ -120,8 +120,8 @@ export const products: Product[] = [
   {
     id: 10,
     name: 'Golden Pendant Necklace',
-    category: 'Jewelry',
-    productType: 'Accessories',
+    category: 'Accessories',
+    productType: 'accessory',
     price: 35,
     originalPrice: 50,
     discount: 30,
@@ -131,8 +131,8 @@ export const products: Product[] = [
   {
     id: 11,
     name: 'Starlight Silver Ring',
-    category: 'Jewelry',
-    productType: 'Accessories',
+    category: 'Accessories',
+    productType: 'accessory',
     price: 85,
     originalPrice: 140,
     discount: 39,
@@ -142,8 +142,8 @@ export const products: Product[] = [
   {
     id: 12,
     name: 'Classic High Heels',
-    category: 'Footwear',
-    productType: 'Accessories',
+    category: 'Accessories',
+    productType: 'accessory',
     price: 95,
     originalPrice: 150,
     discount: 37,

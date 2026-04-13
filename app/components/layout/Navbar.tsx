@@ -22,14 +22,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: 'Home', href: '#' },
-    { label: 'Shop', href: '#' },
-    { label: 'Women', href: '#' },
-    { label: 'Men', href: '#' },
-    { label: 'Accessories', href: '#' },
-    { label: 'About Us', href: '#' },
-    { label: 'Contact Us', href: '#' },
-    { label: 'Blog', href: '#' },
+    { label: 'Home', href: '/' },
+    { label: 'Shop', href: '/shop' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact Us', href: '/contact' },
+    { label: 'Blog', href: '/blog' },
   ];
 
   return (
@@ -83,7 +80,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Spacer: Prevents content jump when navbar becomes fixed */}
       {isSticky && <div className="h-[72px]" />}
     </div>
   );
