@@ -9,7 +9,9 @@ const categories = ["All", "Men", "Women", "Accessories"];
 
 export default function ProductPage() {
   const [priceRange, setPriceRange] = useState([0, 300]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(["Women"]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([
+    "Women",
+  ]);
   const [sortBy, setSortBy] = useState("newest");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,7 +49,9 @@ export default function ProductPage() {
       {/* Header */}
       <header className="bg-gray-200 border-b">
         <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-4xl font-bold mb-4 tracking-tight">All Products</h1>
+          <h1 className="text-4xl font-bold mb-4 tracking-tight">
+            All Products
+          </h1>
           <nav className="flex justify-center gap-4 text-xs uppercase tracking-widest text-gray-500">
             <span>Home</span>
             <span>/</span>
@@ -61,20 +65,31 @@ export default function ProductPage() {
           {/* Sidebar */}
           <aside className="w-full md:w-56 shrink-0">
             <div className="sticky top-24">
-              <h2 className="text-sm font-bold uppercase tracking-wider mb-8">Filter Options</h2>
+              <h2 className="text-sm font-bold uppercase tracking-wider mb-8">
+                Filter Options
+              </h2>
 
               {/* CATEGORY FILTER */}
               <div className="mb-10 pb-8 border-b border-gray-200">
                 <h3 className="font-semibold text-sm mb-5">Category</h3>
-                <div className="space-y-3">
+
+                <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible">
                   {categories.map((cat) => (
-                    <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+                    <label
+                      key={cat}
+                      className="flex items-center gap-2 whitespace-nowrap cursor-pointer group"
+                    >
                       <input
                         type="checkbox"
-                        checked={cat === "All" ? selectedCategories.length === 0 : selectedCategories.includes(cat)}
+                        checked={
+                          cat === "All"
+                            ? selectedCategories.length === 0
+                            : selectedCategories.includes(cat)
+                        }
                         onChange={() => handleCategoryChange(cat)}
-                        className="w-4 h-4 rounded border-gray-300 text-amber-900 focus:ring-amber-900 cursor-pointer"
+                        className="w-4 h-4 border-gray-300 text-amber-900 focus:ring-amber-900 cursor-pointer"
                       />
+
                       <span className="text-sm text-gray-600 group-hover:text-black transition-colors">
                         {cat}
                       </span>
@@ -86,7 +101,7 @@ export default function ProductPage() {
               {/* PRICE FILTER */}
               <div className="mb-8">
                 <h3 className="font-semibold text-sm mb-5">Price Range</h3>
-                <div className="space-y-6">
+                <div className="space-y-2">
                   <Slider
                     value={priceRange}
                     onValueChange={setPriceRange}
@@ -110,7 +125,9 @@ export default function ProductPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-gray-100">
               <div className="flex items-center gap-4 flex-wrap">
                 <span className="text-sm text-gray-500">
-                  {isLoading ? "Fetching items..." : `${filteredProducts.length} Products Found`}
+                  {isLoading
+                    ? "Fetching items..."
+                    : `${filteredProducts.length} Products Found`}
                 </span>
 
                 {!isLoading && selectedCategories.length > 0 && (
@@ -130,7 +147,9 @@ export default function ProductPage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-[11px] uppercase tracking-wider text-gray-400 font-bold">Sort By:</span>
+                <span className="text-[11px] uppercase tracking-wider text-gray-400 font-bold">
+                  Sort By:
+                </span>
                 <button className="flex items-center gap-1 text-sm font-semibold">
                   {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}
                   <ChevronDown className="w-4 h-4" />
@@ -161,7 +180,7 @@ export default function ProductPage() {
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      
+
                       {/* DISCOUNT BADGE */}
                       {product.discount > 0 && (
                         <div className="absolute top-4 left-4 bg-black text-white px-2 py-1 text-[10px] font-bold uppercase tracking-tighter">
@@ -200,9 +219,14 @@ export default function ProductPage() {
               ) : (
                 // ✅ EMPTY STATE
                 <div className="col-span-full text-center py-24">
-                  <p className="text-gray-400 italic">No products match your current filters.</p>
-                  <button 
-                    onClick={() => {setSelectedCategories([]); setPriceRange([0, 300]);}}
+                  <p className="text-gray-400 italic">
+                    No products match your current filters.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSelectedCategories([]);
+                      setPriceRange([0, 300]);
+                    }}
                     className="mt-4 text-sm font-bold uppercase tracking-widest text-amber-900 underline"
                   >
                     Reset all filters

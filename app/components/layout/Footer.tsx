@@ -24,7 +24,7 @@ export default function Footer() {
   return (
     <footer className="relative w-full overflow-hidden py-16 px-4 bg-gray-50">
       
-      {/* Soft gradient like hero */}
+      {/* Soft background */}
       <div className="absolute inset-0 bg-linear-to-r from-gray-50 via-gray-50/95 to-white z-0" />
 
       {/* Content */}
@@ -32,7 +32,7 @@ export default function Footer() {
         
         {/* Brand */}
         <div className="mb-12">
-          <h2 className="text-4xl md:text-5xl italic font-serif text-gray-900 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-heading text-gray-900 tracking-[0.12em] uppercase">
             Fashion SaaS
           </h2>
         </div>
@@ -43,7 +43,7 @@ export default function Footer() {
             <Link
               key={link}
               href="#"
-              className="text-xs font-bold tracking-[0.3em] text-gray-700 hover:text-amber-900 transition-all uppercase"
+              className="text-xs font-sans tracking-[0.3em] text-gray-700 hover:text-amber-900 transition-all uppercase"
             >
               {link}
             </Link>
@@ -56,14 +56,14 @@ export default function Footer() {
             <Link
               key={link}
               href="#"
-              className="text-[11px] font-medium tracking-[0.2em] text-gray-500 hover:text-gray-900 transition-all uppercase"
+              className="text-[11px] font-sans tracking-[0.2em] text-gray-500 hover:text-gray-900 transition-all uppercase"
             >
               {link}
             </Link>
           ))}
         </nav>
 
-        {/* Social Icons - clean instead of glass */}
+        {/* Social Icons */}
         <div className="flex justify-center gap-5">
           {socialLinks.map((social) => {
             const Icon = social.icon
@@ -82,10 +82,11 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="mt-10 pt-6 border-t border-gray-200 w-full text-center">
-          <p className="text-[10px] tracking-[0.3em] text-gray-400 uppercase">
+          <p className="text-[10px] font-sans tracking-[0.3em] text-gray-400 uppercase">
             © {new Date().getFullYear()} Fashion SaaS. All rights reserved.
           </p>
         </div>
+
       </div>
     </footer>
   )
