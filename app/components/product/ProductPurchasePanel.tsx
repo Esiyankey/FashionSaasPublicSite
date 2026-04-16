@@ -106,7 +106,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           </div>
 
           <div className="mb-6 flex items-center gap-4 border-b border-border pb-6">
-            <div className="flex items-center rounded-lg border border-border">
+            <div className="flex items-center  border border-border">
               <button
                 type="button"
                 onClick={() => setQuantity((current) => Math.max(1, current - 1))}
@@ -140,7 +140,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         <div className="space-y-3">
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-4 font-semibold tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
+            className="flex w-full items-center justify-center gap-2  bg-accent py-4 font-semibold tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
           >
             <ShoppingCart className="size-5" />
             Add to Cart
@@ -149,7 +149,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             type="button"
             onClick={() => setWishlist((current) => !current)}
             className={cn(
-              "flex w-full items-center justify-center gap-2 rounded-lg border-2 py-4 font-semibold tracking-wide transition-all",
+              "flex w-full items-center justify-center gap-2  border-2 py-4 font-semibold tracking-wide transition-all",
               wishlist
                 ? "border-accent bg-secondary text-accent"
                 : "border-border hover:border-accent",

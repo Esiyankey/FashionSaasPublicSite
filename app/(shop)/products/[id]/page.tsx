@@ -76,7 +76,7 @@ export default async function ProductDetailsPage({ params }: Props) {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {relatedProducts.map((item) => (
               <Link key={item.id} href={`/products/${item.id}`} className="group block">
-                <div className="relative mb-4 aspect-square overflow-hidden rounded-lg border border-border bg-secondary transition-colors group-hover:border-accent">
+                <div className="relative mb-4 aspect-square overflow-hidden  border border-border bg-secondary transition-colors group-hover:border-accent">
                   <Image
                     src={item.image}
                     alt={item.name}

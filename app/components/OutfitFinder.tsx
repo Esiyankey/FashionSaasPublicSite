@@ -185,18 +185,17 @@ export function OutfitFinder() {
   };
 
   return (
-    <section className="w-full py-16 px-4 md:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
+    <section className="w-full bg-white px-6 py-16 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
           <p className="text-amber-600 font-semibold text-sm mb-2 tracking-wider uppercase">
             Style Discovery
           </p>
 
-          <h1 className="text-4xl md:text-5xl  text-center mb-3 text-gray-900">
+          <h2 className="mb-3 text-center text-4xl text-gray-900 md:text-5xl">
             Find Your <span className=" font-heading">Perfect</span>{" "}
             Outfit
-          </h1>
+          </h2>
 
           <p className="text-gray-600 max-w-2xl mx-auto text-sm font-sans">
             Personalized curation based on your unique silhouette and the magic
@@ -204,20 +203,17 @@ export function OutfitFinder() {
           </p>
         </div>
 
-        {/* GRID FIXED */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* LEFT */}
+        <div className="grid grid-cols-1 gap-8 rounded-[1.5rem] border border-amber-100 bg-stone-50/70 p-6 shadow-sm lg:grid-cols-12 lg:p-8">
           <div className="lg:col-span-3">
-            {/* Gender */}
-            <div className="flex gap-3 mb-8">
+            <div className="mb-8 flex flex-wrap gap-3">
               {["FEMALE", "MALE"].map((g) => (
                 <button
                   key={g}
                   onClick={() => setGender(g as Gender)}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     gender === g
                       ? "bg-amber-500 text-gray-900"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-white text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {g}
@@ -225,21 +221,20 @@ export function OutfitFinder() {
               ))}
             </div>
 
-            {/* Body Type */}
             <div className="mb-8">
-              <h3 className="text-gray-900 font-semibold text-sm mb-4 font-sans">
+              <h3 className="mb-4 text-sm font-semibold text-gray-900 font-sans">
                 01. BODY TYPE
               </h3>
 
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col">
                 {bodyTypes.map((type) => (
                   <button
                     key={type}
                     onClick={() => setBodyType(type)}
-                    className={`relative shrink-0 transition-all overflow-hidden ${
+                    className={`relative shrink-0 overflow-hidden  bg-white transition-all ${
                       bodyType === type
-                        ? "border-2 border-amber-500"
-                        : "border border-gray-300 hover:border-gray-400"
+                        ? "border-2 border-amber-500 shadow-md"
+                        : "border border-gray-200 hover:border-gray-400"
                     }`}
                   >
                     <Image
@@ -249,7 +244,7 @@ export function OutfitFinder() {
                       height={96}
                       className="h-24 w-20 object-cover"
                     />
-                    <p className="text-xs font-sans text-gray-800 bg-white py-1 px-1">
+                    <p className="bg-white px-2 py-2 text-xs font-sans text-gray-800">
                       {bodyTypeLabels[type]}
                     </p>
                   </button>
@@ -257,9 +252,8 @@ export function OutfitFinder() {
               </div>
             </div>
 
-            {/* Skin Tone */}
             <div>
-              <h3 className="text-gray-900 font-semibold text-sm mb-4 font-sans">
+              <h3 className="mb-4 text-sm font-semibold text-gray-900 font-sans">
                 02. SKIN TONE
               </h3>
 
@@ -273,48 +267,50 @@ export function OutfitFinder() {
                       backgroundColor: skinToneColors[tone],
                     }}
                     aria-label={`Choose ${tone.replaceAll("_", " ").toLowerCase()} skin tone`}
+                    title={tone.replaceAll("_", " ")}
                   />
                 ))}
               </div>
             </div>
           </div>
 
-          {/* MIDDLE (BIG) */}
-          <div className="lg:col-span-6 flex justify-center">
-            <div className="w-full max-w-lg lg:max-w-xl h-[650px] overflow-hidden">
+          <div className="flex justify-center lg:col-span-6">
+            <div className="relative h-[420px] w-full overflow-hidden  bg-white shadow-lg sm:h-[520px] lg:h-[650px] lg:max-w-xl">
               <Image
                 src={currentOutfit.image}
                 alt={currentOutfit.title}
-                width={640}
-                height={800}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
           </div>
 
-          {/* RIGHT (SMALLER) */}
           <div className="lg:col-span-3">
-            <Badge className="bg-amber-100 text-amber-800 mb-4 font-sans">
+            <div className=" bg-white p-6 shadow-sm">
+            <Badge className="mb-4 bg-amber-100 text-amber-800 font-sans">
               {currentOutfit.category}
             </Badge>
 
-            <h2 className="text-3xl font-heading text-gray-900 mb-6">
+            <h3 className="mb-6 text-3xl font-heading text-gray-900">
               {currentOutfit.title}
-            </h2>
+            </h3>
 
-            <Image
-              src={currentOutfit.fabricImage}
-              alt={`${currentOutfit.title} fabric detail`}
-              width={400}
-              height={128}
-              className="w-full h-32 object-cover mb-6"
-            />
+            <div className="relative mb-6 h-32 overflow-hidden ">
+              <Image
+                src={currentOutfit.fabricImage}
+                alt={`${currentOutfit.title} fabric detail`}
+                fill
+                sizes="(max-width: 1024px) 100vw, 25vw"
+                className="object-cover"
+              />
+            </div>
 
             <p className="text-gray-600 text-sm mb-6 font-sans">
               {currentOutfit.description}
             </p>
 
-            <button className="w-full bg-amber-600 text-gray-900 py-3 font-semibold mb-4 flex items-center justify-center gap-2">
+            <button className="mb-4 flex w-full items-center justify-center gap-2  bg-amber-500 py-3 font-semibold text-gray-900 transition-colors hover:bg-amber-400">
               <ShoppingBag size={18} />
               Shop This Look
             </button>
@@ -322,17 +318,18 @@ export function OutfitFinder() {
             <div className="flex gap-3">
               <button
                 onClick={handleSave}
-                className="flex-1 border border-gray-300 py-2"
+                className="flex-1  border border-gray-300 py-2 transition-colors hover:bg-gray-50"
               >
                 {savedItems.includes(currentOutfit.id) ? "Saved" : "Save"}
               </button>
 
               <button
                 onClick={handleRefresh}
-                className="flex-1 border border-gray-300 py-2"
+                className="flex-1  border border-gray-300 py-2 transition-colors hover:bg-gray-50"
               >
                 Refresh
               </button>
+            </div>
             </div>
           </div>
         </div>
