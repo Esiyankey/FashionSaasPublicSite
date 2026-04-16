@@ -4,22 +4,28 @@ import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[calc(100vh-7rem)] overflow-hidden bg-white">
-      <Image
-        src="/images/hero-image-1.jpg"
-        alt="Editorial fashion campaign with model in a summer look"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-right"
-      />
-      <div className="absolute inset-0 bg-linear-to-r from-gray-50 via-gray-50/95 to-gray-50/20" />
+    <section
+      className="min-h-screen bg-cover bg-right relative overflow-hidden"
+      style={{
+        backgroundImage:
+          'url(/images/hero-image-1.jpg)',
+      }}
+    >
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 bg-linear-to-r from-gray-50 via-gray-50/95 to-transparent"></div>
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2">
-        <div className="pt-10 lg:pt-0">
-          <div className="mb-6 flex items-center gap-2">
-            <div className="flex size-6 items-center justify-center rounded-full bg-amber-700">
-              <div className="size-3 rounded-full bg-amber-400" />
+      
+
+      <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="pt-10 lg:pt-0">
+            {/* Badge */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-6 h-6 bg-amber-700 rounded-full flex items-center justify-center">
+                <div className="w-3 h-3 bg-amber-400 rounded-full" />
+              </div>
+              <span className="text-gray-700 text-sm font-medium">50% OFF Summer Super Sale</span>
             </div>
             <span className="text-sm font-medium text-gray-700">50% off summer super sale</span>
           </div>

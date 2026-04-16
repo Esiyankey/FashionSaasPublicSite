@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
+import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import { siteConfig } from "./lib/site";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -27,14 +37,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col font-sans">
+    <html
+      lang="en"
+      className={`${inter.variable} ${raleway.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col font-sans">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        {children}
         <Footer />
       </body>
     </html>
