@@ -20,7 +20,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="relative">
+    <header className="relative z-40">
       {showBanner && (
         <div className="flex h-[40px] items-center justify-between bg-amber-950 px-4 py-2 text-[11px] uppercase tracking-widest text-amber-100">
           <span className="font-medium">Support {siteConfig.contact.phone}</span>
@@ -39,7 +39,7 @@ export default function Navbar() {
       )}
 
       <nav
-        className={`flex items-center justify-between bg-white px-6 py-4 transition-all duration-300 ${
+        className={`flex items-center justify-between border-b border-stone-200/80 bg-white/95 px-6 py-4 backdrop-blur transition-all duration-300 sm:px-8 lg:px-10 ${
           isSticky ? 'fixed left-0 top-0 z-50 w-full shadow-sm' : 'relative'
         }`}
       >
@@ -124,6 +124,6 @@ export default function Navbar() {
       </div>
 
       {isSticky && <div className="h-[72px]" />}
-    </div>
+    </header>
   );
 }

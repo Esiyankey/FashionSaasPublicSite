@@ -11,7 +11,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative w-full overflow-hidden bg-gray-50 px-4 py-16">
+    <footer className="relative w-full overflow-hidden bg-gray-50 px-6 py-16 sm:px-8 lg:px-10">
       <div className="absolute inset-0 z-0 bg-linear-to-r from-gray-50 via-gray-50/95 to-white" />
 
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center">
@@ -62,7 +62,7 @@ export default function Footer() {
 
         <div className="mt-10 w-full border-t border-gray-200 pt-6 text-center">
           <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-gray-400">
-            © {new Date().getFullYear()} Fashion SaaS. All rights reserved.
+            &copy; {new Date().getFullYear()} Fashion SaaS. All rights reserved.
           </p>
         </div>
       </div>

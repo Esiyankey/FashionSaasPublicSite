@@ -18,7 +18,7 @@ interface CategoryCardProps {
 
 export function CategoryCards() {
   return (
-    <section className="bg-white px-6 py-16">
+    <section className="bg-white px-6 py-16 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 max-w-2xl">
           <p className="text-sm uppercase tracking-[0.25em] text-amber-900">Shop by Category</p>
@@ -27,15 +27,15 @@ export function CategoryCards() {
           </h2>
         </header>
 
-        <div className="grid h-[700px] grid-cols-1 gap-6 lg:h-[600px] lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:h-[620px] lg:grid-cols-2">
           <CategoryCard
             data={categoriesData[0]}
-            className="lg:row-span-2"
+            className="min-h-[420px] lg:row-span-2 lg:min-h-0"
             titleSize="text-4xl"
             priority
           />
-          <CategoryCard data={categoriesData[1]} titleSize="text-3xl" />
-          <CategoryCard data={categoriesData[2]} titleSize="text-3xl" />
+          <CategoryCard data={categoriesData[1]} className="min-h-[300px]" titleSize="text-3xl" />
+          <CategoryCard data={categoriesData[2]} className="min-h-[300px]" titleSize="text-3xl" />
         </div>
       </div>
     </section>
@@ -51,7 +51,7 @@ function CategoryCard({
   return (
     <Link
       href="/shop"
-      className={`group relative overflow-hidden shadow-sm transition-all duration-500 hover:shadow-xl ${className}`}
+      className={`group relative block overflow-hidden  bg-gray-100 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${className}`}
     >
       <Image
         src={data.image}
@@ -63,7 +63,7 @@ function CategoryCard({
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/30 via-black/20 to-transparent" />
 
-      <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
+      <div className="absolute inset-0 flex flex-col justify-end p-6 text-white sm:p-8">
         <p className="mb-2 text-sm font-medium opacity-90">{data.itemCount} Items</p>
 
         <h3 className={`${titleSize} mb-2 font-bold tracking-tight`}>{data.title}</h3>

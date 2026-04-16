@@ -60,7 +60,7 @@ export default async function BlogPostPage({ params }: Props) {
         <p className="mt-4 text-sm uppercase tracking-[0.2em] text-gray-500">{post.date}</p>
       </header>
 
-      <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-lg bg-slate-100">
+      <div className="relative mt-10 aspect-[16/9] overflow-hidden  bg-slate-100">
         <Image src={post.image} alt={post.title} fill priority className="object-cover" />
       </div>
 

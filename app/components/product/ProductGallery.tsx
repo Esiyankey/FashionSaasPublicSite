@@ -24,7 +24,7 @@ export function ProductGallery({
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-border bg-secondary">
+      <div className="relative aspect-[4/5] overflow-hidden  border border-border bg-secondary">
         <Image
           src={images[selectedImage]}
           alt={name}
@@ -58,7 +58,7 @@ export function ProductGallery({
             type="button"
             onClick={() => setSelectedImage(index)}
             className={cn(
-              "relative h-20 w-20 overflow-hidden rounded-lg border-2 transition-all",
+              "relative h-20 w-20 overflow-hidden  border-2 transition-all",
               index === selectedImage
                 ? "border-accent"
                 : "border-border hover:border-accent/50",

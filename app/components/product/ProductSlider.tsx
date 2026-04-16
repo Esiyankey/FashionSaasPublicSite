@@ -34,15 +34,17 @@ export function ProductSlider() {
       : featuredProducts.filter((product) => product.category === selectedCategory);
 
   return (
-    <section className="overflow-hidden bg-white px-4 py-12 md:px-6">
-      <div>
-        <div className="mb-8 md:px-6">
+    <section className="overflow-hidden bg-white px-6 py-16 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8">
           <p className="text-sm uppercase tracking-wide text-gray-500">Our Products</p>
-          <div className="flex flex-col items-center justify-between md:flex-row">
-            <h2 className="mt-2 text-4xl font-bold text-gray-900">Our Top Seller Products</h2>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <h2 className="mt-2 text-3xl font-bold text-gray-900 sm:text-4xl">
+              Our Top Seller Products
+            </h2>
 
-            <div className="no-scrollbar my-2 flex items-center justify-between overflow-x-auto pl-6 md:my-0 md:px-6">
-              <div className="flex gap-2 pb-2 md:pb-0">
+            <div className="no-scrollbar -mx-1 overflow-x-auto">
+              <div className="flex gap-2 px-1 pb-2 md:pb-0">
                 {categories.map((category) => (
                   <button
                     key={category}
@@ -62,11 +64,11 @@ export function ProductSlider() {
           </div>
         </div>
 
-        <div className="group/main relative px-0 md:px-6">
+        <div className="group/main relative">
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="absolute -left-2 top-[40%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 md:flex"
+            className="absolute -left-4 top-[38%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 lg:flex"
             aria-label="Previous products"
           >
             <ChevronLeft size={20} />
@@ -74,7 +76,7 @@ export function ProductSlider() {
 
           <div
             ref={sliderRef}
-            className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-6"
+            className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-6 sm:gap-6"
           >
             {filteredProducts.map((product) => (
               <article key={product.id} className="w-[280px] shrink-0 snap-start md:w-[320px]">
@@ -132,7 +134,7 @@ export function ProductSlider() {
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="absolute -right-2 top-[40%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 md:flex"
+            className="absolute -right-4 top-[38%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 lg:flex"
             aria-label="Next products"
           >
             <ChevronRight size={20} />
