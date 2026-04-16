@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Bookmark, RotateCcw, ShoppingBag } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 type Gender = "FEMALE" | "MALE";
@@ -175,7 +175,6 @@ export function OutfitFinder() {
   };
 
   const currentOutfit = getOutfit();
-  const isSaved = savedItems.includes(currentOutfit.id);
 
   const handleSave = () => {
     setSavedItems((prev) =>
@@ -252,9 +251,12 @@ export function OutfitFinder() {
                         : "border border-gray-300 hover:border-gray-400"
                     }`}
                   >
-                    <img
+                    <Image
                       src={bodyTypeImages[type]}
-                      className="w-20 h-24 object-cover"
+                      alt={`${bodyTypeLabels[type]} body type`}
+                      width={80}
+                      height={96}
+                      className="h-24 w-20 object-cover"
                     />
                     <p className="text-xs font-sans text-gray-800 bg-white py-1 px-1">
                       {bodyTypeLabels[type]}
@@ -279,6 +281,7 @@ export function OutfitFinder() {
                     style={{
                       backgroundColor: skinToneColors[tone],
                     }}
+                    aria-label={`Choose ${skinToneLabels[tone]} skin tone`}
                   />
                 ))}
               </div>
@@ -288,9 +291,12 @@ export function OutfitFinder() {
           {/* MIDDLE (BIG) */}
           <div className="lg:col-span-6 flex justify-center">
             <div className="w-full max-w-lg lg:max-w-xl h-[650px] overflow-hidden">
-              <img
+              <Image
                 src={currentOutfit.image}
-                className="w-full h-full object-cover"
+                alt={currentOutfit.title}
+                width={640}
+                height={800}
+                className="h-full w-full object-cover"
               />
             </div>
           </div>
@@ -305,9 +311,12 @@ export function OutfitFinder() {
               {currentOutfit.title}
             </h2>
 
-            <img
+            <Image
               src={currentOutfit.fabricImage}
-              className="w-full h-32 object-cover mb-6"
+              alt={`${currentOutfit.title} fabric detail`}
+              width={400}
+              height={128}
+              className="mb-6 h-32 w-full object-cover"
             />
 
             <p className="text-gray-600 text-sm mb-6 font-sans">
@@ -324,7 +333,7 @@ export function OutfitFinder() {
                 onClick={handleSave}
                 className="flex-1 border border-gray-300 py-2"
               >
-                Save
+                {savedItems.includes(currentOutfit.id) ? "Saved" : "Save"}
               </button>
 
               <button

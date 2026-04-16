@@ -41,6 +41,8 @@
    LIGHT MODE
 ========================= */
 :root {
+  --font-sans: "Aptos", "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-heading: "Iowan Old Style", "Book Antiqua", "Palatino Linotype", serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
 
@@ -110,6 +112,10 @@
     font-family: var(--font-sans);
   }
 
+  img {
+    height: auto;
+  }
+
   /* HEADINGS - CLEAN FASHION STYLE */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
@@ -126,5 +132,9 @@
     text-transform: uppercase;
     font-size: 0.9rem;
     letter-spacing: 0.1em;
+  }
+
+  a {
+    @apply transition-colors;
   }
 }

@@ -1,60 +1,57 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
+  ChevronLeft,
+  ChevronRight,
   Heart,
   Maximize2,
   ShoppingBag,
-  ChevronLeft,
-  ChevronRight,
   Star,
 } from "lucide-react";
-import { products, categories } from "../../lib/products-data";
-import Image from "next/image"; // Switched to Next.js Image for optimization
+import { categories, featuredProducts } from "../../lib/products-data";
 
 export function ProductSlider() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
-    if (sliderRef.current) {
-      const scrollAmount = 340;
-      sliderRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
+    if (!sliderRef.current) {
+      return;
     }
+
+    sliderRef.current.scrollBy({
+      left: direction === "left" ? -340 : 340,
+      behavior: "smooth",
+    });
   };
 
   const filteredProducts =
     selectedCategory === "All"
-      ? products
-      : products.filter((product) => product.productType === selectedCategory);
+      ? featuredProducts
+      : featuredProducts.filter((product) => product.category === selectedCategory);
 
   return (
-    <section className="bg-white py-12 px-4 md:px-6 overflow-hidden">
+    <section className="overflow-hidden bg-white px-4 py-12 md:px-6">
       <div>
-        {/* Header Section */}
-        <div className="mb-8  md:text-left md:px-6">
-          <p className="text-gray-500 text-sm uppercase tracking-wide">
-            Our Products
-          </p>
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <h2 className="text-4xl font-bold text-gray-900 mt-2">
-              Our Top Seller Products
-            </h2>
+        <div className="mb-8 md:px-6">
+          <p className="text-sm uppercase tracking-wide text-gray-500">Our Products</p>
+          <div className="flex flex-col items-center justify-between md:flex-row">
+            <h2 className="mt-2 text-4xl font-bold text-gray-900">Our Top Seller Products</h2>
 
-            {/* Improved Mobile Tabs (Scrollable Pills) */}
-            <div className="flex items-center justify-between pl-6 md:px-6 my-2 md:my-0 overflow-x-auto no-scrollbar">
+            <div className="no-scrollbar my-2 flex items-center justify-between overflow-x-auto pl-6 md:my-0 md:px-6">
               <div className="flex gap-2 pb-2 md:pb-0">
                 {categories.map((category) => (
                   <button
                     key={category}
+                    type="button"
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-6 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border ${
+                    className={`whitespace-nowrap rounded-full border px-6 py-2 text-sm font-medium transition-all duration-300 ${
                       selectedCategory === category
-                        ? "bg-gray-900 border-gray-900 text-white shadow-md"
-                        : "bg-white border-gray-200 text-gray-600 hover:border-gray-400"
+                        ? "border-gray-900 bg-gray-900 text-white shadow-md"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-gray-400"
                     }`}
                   >
                     {category}
@@ -65,96 +62,84 @@ export function ProductSlider() {
           </div>
         </div>
 
-        {/* Products Slider Area */}
-        <div className="relative group/main px-0 md:px-6">
-          {/* Navigation Arrows (Desktop Only) */}
+        <div className="group/main relative px-0 md:px-6">
           <button
+            type="button"
             onClick={() => scroll("left")}
-            className="hidden md:flex absolute -left-2 top-[40%] -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-xl text-gray-800 hover:bg-gray-50 transition-all border border-gray-100"
-            aria-label="Previous"
+            className="absolute -left-2 top-[40%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 md:flex"
+            aria-label="Previous products"
           >
             <ChevronLeft size={20} />
           </button>
 
-          {/* Slider - no-scrollbar class removes the bar */}
           <div
             ref={sliderRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-6 snap-x snap-mandatory"
+            className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-6"
           >
             {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="shrink-0 w-[280px] md:w-[320px] snap-start"
-              >
-                {/* Product Image Container - HOVER TRIGGER HERE */}
-                <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 group/image">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
-                  />
+              <article key={product.id} className="w-[280px] shrink-0 snap-start md:w-[320px]">
+                <Link href={`/products/${product.id}`} className="block">
+                  <div className="group/image relative aspect-[4/5] overflow-hidden bg-gray-100">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 280px, 320px"
+                      className="object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    />
 
-                  {/* Discount Badge */}
-
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-amber-900 px-2.5 py-1  text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                    {product.discount}% OFF
-                  </div>
-
-                  {/* Icons: Only show when hovering /image container */}
-                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300" />
-
-                  <div className="absolute right-4 top-4 flex flex-col gap-2 translate-x-4 opacity-0 group-hover/image:translate-x-0 group-hover/image:opacity-100 transition-all duration-300">
-                    <IconButton icon={<Heart size={18} />} />
-                    <IconButton icon={<Maximize2 size={18} />} />
-                    <IconButton icon={<ShoppingBag size={18} />} />
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div className="pt-4 px-1">
-                  <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">
-                    {product.category}
-                  </p>
-                  <h3 className="text-base font-semibold text-gray-800 truncate mb-2">
-                    {product.name}
-                  </h3>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-gray-900">
-                        ${product.price.toFixed(2)}
-                      </span>
-                      <span className="text-sm text-gray-400 line-through">
-                        ${product.originalPrice.toFixed(2)}
-                      </span>
+                    <div className="absolute left-4 top-4 bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-900 shadow-sm backdrop-blur-sm">
+                      {product.discount}% OFF
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Star
-                        size={14}
-                        className="fill-amber-400 text-amber-400"
-                      />
-                      <span className="text-xs font-bold text-gray-700">
-                        {product.rating}
-                      </span>
+
+                    <div className="absolute inset-0 bg-black/5 opacity-0 transition-opacity duration-300 group-hover/image:opacity-100" />
+
+                    <div className="absolute right-4 top-4 flex translate-x-4 flex-col gap-2 opacity-0 transition-all duration-300 group-hover/image:translate-x-0 group-hover/image:opacity-100">
+                      <IconButton label="Save item" icon={<Heart size={18} />} />
+                      <IconButton label="Quick view" icon={<Maximize2 size={18} />} />
+                      <IconButton label="Add to cart" icon={<ShoppingBag size={18} />} />
                     </div>
                   </div>
-                </div>
-              </div>
+
+                  <div className="px-1 pt-4">
+                    <p className="mb-1 text-xs uppercase tracking-widest text-gray-400">
+                      {product.category}
+                    </p>
+                    <h3 className="mb-2 truncate text-base font-semibold text-gray-800">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg font-bold text-gray-900">
+                          ${product.price.toFixed(2)}
+                        </span>
+                        <span className="text-sm text-gray-400 line-through">
+                          ${product.originalPrice.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star size={14} className="fill-amber-400 text-amber-400" />
+                        <span className="text-xs font-bold text-gray-700">{product.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </article>
             ))}
           </div>
 
           <button
+            type="button"
             onClick={() => scroll("right")}
-            className="hidden md:flex absolute -right-2 top-[40%] -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-xl text-gray-800 hover:bg-gray-50 transition-all border border-gray-100"
-            aria-label="Next"
+            className="absolute -right-2 top-[40%] z-20 hidden -translate-y-1/2 rounded-full border border-gray-100 bg-white p-3 text-gray-800 shadow-xl transition-all hover:bg-gray-50 md:flex"
+            aria-label="Next products"
           >
             <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      {/* Internal CSS for removing scrollbar */}
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;
@@ -168,10 +153,13 @@ export function ProductSlider() {
   );
 }
 
-// Reusable Icon Button Component
-function IconButton({ icon }: { icon: React.ReactNode }) {
+function IconButton({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <button className="bg-white p-2.5 rounded-full text-gray-700 hover:bg-gray-900 hover:text-white transition-colors shadow-lg">
+    <button
+      type="button"
+      aria-label={label}
+      className="rounded-full bg-white p-2.5 text-gray-700 shadow-lg transition-colors hover:bg-gray-900 hover:text-white"
+    >
       {icon}
     </button>
   );
