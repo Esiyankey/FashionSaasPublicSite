@@ -203,7 +203,7 @@ export function OutfitFinder() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8  p-6 lg:grid-cols-12 lg:p-8">
+        <div className="grid grid-cols-1 gap-8 rounded-[1.5rem] border border-amber-100 bg-stone-50/70 p-6 shadow-sm lg:grid-cols-12 lg:p-8">
           <div className="lg:col-span-3">
             <div className="mb-8 flex flex-wrap gap-3">
               {["FEMALE", "MALE"].map((g) => (
@@ -226,7 +226,7 @@ export function OutfitFinder() {
                 01. BODY TYPE
               </h3>
 
-              <div className="flex gap-3 overflow-x-auto pb-2 flex-row">
+              <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col">
                 {bodyTypes.map((type) => (
                   <button
                     key={type}
