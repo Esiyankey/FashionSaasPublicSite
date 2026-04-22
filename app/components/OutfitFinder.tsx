@@ -41,9 +41,9 @@ const outfitDatabase: Record<string, Outfit[]> = {
         "This ethereal A-line silhouette is specifically tailored to embrace your curves while offering a majestic flow. The silk-satin drapes and blends light beautifully, ensuring you're the most radiant guest of the evening.",
       price: "$2,999",
       image:
-        "https://images.unsplash.com/photo-1595777707802-e2b1f765a986?w=500&h=700&fit=crop",
+        "/images/women/woman-dress2",
       fabricImage:
-        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=150&h=150&fit=crop",
+        "/images/women/woman-dress-3.jpg",
     },
   ],
   FEMALE_PETITE_LIGHT_Wedding: [
@@ -55,9 +55,9 @@ const outfitDatabase: Record<string, Outfit[]> = {
         "A perfect fit for petite frames, this dress features delicate lace detailing and a fitted bodice that creates a beautiful silhouette. The lightweight fabric ensures comfort throughout the celebration.",
       price: "$2,499",
       image:
-        "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=700&fit=crop",
+        "/images/women/woman-dress-3.jpg",
       fabricImage:
-        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=150&h=150&fit=crop",
+        "/images/women/woman-dress-3.jpg",
     },
   ],
   FEMALE_TALL_DARK_Wedding: [
@@ -69,9 +69,9 @@ const outfitDatabase: Record<string, Outfit[]> = {
         "Embrace your height with this stunning floor-length velvet gown. The deep jewel tones complement darker skin beautifully, while the long lines create an incredibly elegant and dramatic presence.",
       price: "$3,299",
       image:
-        "https://images.unsplash.com/photo-1581101767014-48ea170a779d?w=500&h=700&fit=crop",
+        "/images/women/woman-dress-3.jpg",
       fabricImage:
-        "https://images.unsplash.com/photo-1599859431579-d57c56f41c9d?w=150&h=150&fit=crop",
+        "/images/women/woman-dress-3.jpg",
     },
   ],
   MALE_ATHLETIC_MEDIUM_Wedding: [
@@ -83,9 +83,9 @@ const outfitDatabase: Record<string, Outfit[]> = {
         "A perfectly fitted tuxedo designed to showcase your athletic build. Premium wool fabric with subtle texture details ensures you look sharp and sophisticated throughout the evening.",
       price: "$1,899",
       image:
-        "https://images.unsplash.com/photo-1591047990508-253bf370895b?w=500&h=700&fit=crop",
+        "/images/women/woman-dress-3.jpg",
       fabricImage:
-        "https://images.unsplash.com/photo-1569887941648-a66f5c9ee649?w=150&h=150&fit=crop",
+        "/images/women/woman-dress-3.jpg",
     },
   ],
   default: [
@@ -97,9 +97,9 @@ const outfitDatabase: Record<string, Outfit[]> = {
         "This ethereal A-line silhouette is specifically tailored to embrace your curves while offering a majestic flow. The silk-satin drapes and blends light beautifully, ensuring you're the most radiant guest of the evening.",
       price: "$2,999",
       image:
-        "https://images.unsplash.com/photo-1595777707802-e2b1f765a986?w=500&h=700&fit=crop",
+        "/images/women/woman-dress-3.jpg",
       fabricImage:
-        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=150&h=150&fit=crop",
+        "/images/women/woman-dress-3.jpg",
     },
   ],
 };
@@ -203,7 +203,7 @@ export function OutfitFinder() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 rounded-[1.5rem] border border-amber-100 bg-stone-50/70 p-6 shadow-sm lg:grid-cols-12 lg:p-8">
+        <div className="grid grid-cols-1 gap-8  p-6 lg:grid-cols-12 lg:p-8">
           <div className="lg:col-span-3">
             <div className="mb-8 flex flex-wrap gap-3">
               {["FEMALE", "MALE"].map((g) => (
@@ -226,7 +226,7 @@ export function OutfitFinder() {
                 01. BODY TYPE
               </h3>
 
-              <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col">
+              <div className="flex gap-3 overflow-x-auto pb-2 flex-row">
                 {bodyTypes.map((type) => (
                   <button
                     key={type}

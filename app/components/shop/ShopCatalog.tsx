@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, ShoppingCart, X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import {
   categories,
@@ -14,6 +14,7 @@ import {
   type ProductCategory,
   type ProductSortOption,
 } from "@/app/lib/products-data";
+import { AddToCartButton } from "@/app/components/cart/AddToCartButton";
 
 const priceBounds: [number, number] = [0, 300];
 
@@ -34,10 +35,6 @@ function ProductCard({ product }: { product: Product }) {
               -{product.discount}%
             </div>
           )}
-          <span className="absolute bottom-0 left-0 right-0 flex translate-y-full items-center justify-center gap-2 bg-white/95 py-3 text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:translate-y-0">
-            <ShoppingCart className="size-3" />
-            Add to Cart
-          </span>
         </div>
 
         <div className="space-y-1">
@@ -59,6 +56,13 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
+
+      <AddToCartButton
+        product={product}
+        className="mt-4 h-11 w-full rounded-none bg-black py-3 text-[11px] font-bold uppercase tracking-[0.25em] text-white hover:bg-black/90"
+      >
+        Add to Cart
+      </AddToCartButton>
     </article>
   );
 }

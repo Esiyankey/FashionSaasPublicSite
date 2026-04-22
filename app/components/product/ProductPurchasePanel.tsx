@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/app/lib/products-data";
+import { AddToCartButton } from "@/app/components/cart/AddToCartButton";
 
 const tabs = [
   { id: "description", label: "Description" },
@@ -138,13 +139,15 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
         </div>
 
         <div className="space-y-3">
-          <button
-            type="button"
-            className="flex w-full items-center justify-center gap-2  bg-accent py-4 font-semibold tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
+          <AddToCartButton
+            product={product}
+            quantity={quantity}
+            size={selectedSize}
+            color={selectedColor}
+            className="h-auto w-full rounded-none bg-accent py-4 font-semibold tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
           >
-            <ShoppingCart className="size-5" />
             Add to Cart
-          </button>
+          </AddToCartButton>
           <button
             type="button"
             onClick={() => setWishlist((current) => !current)}

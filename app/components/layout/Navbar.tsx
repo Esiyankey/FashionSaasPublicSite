@@ -4,11 +4,13 @@ import { useEffect, useEffectEvent, useState } from 'react';
 import Link from 'next/link';
 import { Menu, Search, ShoppingCart, User, X } from 'lucide-react';
 import { siteConfig } from '@/app/lib/site';
+import { useCart } from '@/app/components/cart/CartProvider';
 
 export default function Navbar() {
   const [showBanner, setShowBanner] = useState(true);
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { itemCount } = useCart();
 
   const handleScroll = useEffectEvent(() => {
     setIsSticky(window.scrollY > 40);
@@ -80,12 +82,12 @@ export default function Navbar() {
           <button type="button" aria-label="Account" className="hidden sm:block">
             <User size={20} />
           </button>
-          <button type="button" aria-label="Cart" className="relative">
+          <Link href="/cart" aria-label="Cart" className="relative">
             <ShoppingCart size={20} />
             <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-amber-900 text-[10px] text-white">
-              0
+              {itemCount}
             </span>
-          </button>
+          </Link>
         </div>
       </nav>
 
