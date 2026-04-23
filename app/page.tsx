@@ -1,6 +1,7 @@
 import { CategoryCards } from "./components/CategorySection";
 import { Hero } from "./components/HeroBanner";
 import { InteractiveShowcase } from "./components/home/InteractiveShowcase";
+import PromotionSection from "./components/PromotionSection";
 import { createMetadata } from "./lib/site";
 
 export const metadata = createMetadata({
@@ -17,6 +18,7 @@ export default function Home() {
       <Hero />
       <CategoryCards />
       <InteractiveShowcase />
+      <PromotionSection/>
     </>
   );
 }

@@ -17,6 +17,7 @@ export const siteConfig = {
     { label: "Shop", href: "/shop" },
     { label: "About", href: "/about" },
     { label: "Blog", href: "/blog" },
+      { label: "Contact", href: "/contact" },
   ],
   footerLinks: [
     { label: "Brand Directory", href: "/shop" },

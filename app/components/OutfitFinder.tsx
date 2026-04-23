@@ -106,6 +106,7 @@ const outfitDatabase: Record<string, Outfit[]> = {
 
 export function OutfitFinder() {
   const [gender, setGender] = useState<Gender>("FEMALE");
+  const [bodyTypeMen,setBodyTypeMen]=useState<BodyType>("ATHLETIC");
   const [bodyType, setBodyType] = useState<BodyType>("CURVY");
   const [skinTone, setSkinTone] = useState<SkinTone>("MEDIUM");
   const [occasion, setOccasion] = useState<Occasion>("Wedding");
@@ -117,6 +118,7 @@ export function OutfitFinder() {
     "PEAR",
     "HOURGLASS",
   ];
+
 
   const bodyTypeLabels: Record<string, string> = {
     CURVY: "Apple",
@@ -203,7 +205,7 @@ export function OutfitFinder() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 rounded-[1.5rem] border border-amber-100 bg-stone-50/70 p-6 shadow-sm lg:grid-cols-12 lg:p-8">
+        <div className="grid grid-cols-1 gap-8  bg-stone-50/70 p-6 shadow-sm lg:grid-cols-12 lg:p-8">
           <div className="lg:col-span-3">
             <div className="mb-8 flex flex-wrap gap-3">
               {["FEMALE", "MALE"].map((g) => (
@@ -226,7 +228,7 @@ export function OutfitFinder() {
                 01. BODY TYPE
               </h3>
 
-              <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col">
+              <div className="flex gap-3 overflow-x-auto pb-2 flex-row">
                 {bodyTypes.map((type) => (
                   <button
                     key={type}
