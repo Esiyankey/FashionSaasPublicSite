@@ -106,7 +106,6 @@ const outfitDatabase: Record<string, Outfit[]> = {
 
 export function OutfitFinder() {
   const [gender, setGender] = useState<Gender>("FEMALE");
-  const [bodyTypeMen,setBodyTypeMen]=useState<BodyType>("ATHLETIC");
   const [bodyType, setBodyType] = useState<BodyType>("CURVY");
   const [skinTone, setSkinTone] = useState<SkinTone>("MEDIUM");
   const [occasion, setOccasion] = useState<Occasion>("Wedding");
