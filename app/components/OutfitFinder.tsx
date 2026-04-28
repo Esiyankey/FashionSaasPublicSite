@@ -128,7 +128,7 @@ export function OutfitFinder() {
   return (
     <div className="min-h-screen bg-[#F0EDE6]">
       {/* Top Navigation */}
-      <nav className="  flex justify-around items-center pt-12 px-6">
+      <nav className="  flex justify-around items-center flex-col md:flex-row pt-12 px-6">
         <div className="flex items-center gap-2">
           <div
             className="w-5 h-5 bg-[#1A1A1A]"
@@ -143,7 +143,7 @@ export function OutfitFinder() {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-[10px] uppercase tracking-widest text-[#6B6B6B] mr-2">
+          <span className="text-[10px] mt-2 md:mt-0 uppercase tracking-widest text-[#6B6B6B] mr-2">
             Personalization Progress
           </span>
           <div className="w-32 h-1 bg-gray-200">
