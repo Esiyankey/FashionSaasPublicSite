@@ -61,26 +61,18 @@ const stepPhotos = [
 ];
 
 export function OutfitFinder() {
-  const [gender, setGender] = useState<Gender>("FEMALE");
-  const [bodyType, setBodyType] = useState<BodyType>("CURVY");
-  const [skinTone, setSkinTone] = useState<SkinTone>("MEDIUM");
-  const [occasion, setOccasion] = useState<Occasion>("Wedding");
-  const [savedItems, setSavedItems] = useState<string[]>([]);
-
-  const bodyTypes: BodyType[] = [
-    "CURVY",
-    "INVERTED_TRIANGLE",
-    "PEAR",
-    "HOURGLASS",
-  ];
+ const [step, setStep] = useState(0)
+  const [bodyType, setBodyType] = useState('hourglass')
+  const [skinTone, setSkinTone] = useState('peach')
+  const [occasion, setOccasion] = useState<string | null>(null)
+  const [showResult, setShowResult] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
 
 
-  const bodyTypeLabels: Record<string, string> = {
-    CURVY: "Apple",
-    INVERTED_TRIANGLE: "Inverted Triangle",
-    PEAR: "Pear",
-    HOURGLASS: "Hourglass",
-  };
+
+
+  const progressPercentage = showResult ? 100 : ((step + 1) / 3) * 100
 
   const handleStepNext = () => {
     if (step < 2) {
