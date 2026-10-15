@@ -1,13 +1,17 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "./lib/site";
+import { getStorefrontHome } from "@/services/storefront.service";
 
-export default function robots(): MetadataRoute.Robots {
+export const dynamic = "force-dynamic";
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const storefront = await getStorefrontHome();
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || storefront.store.siteUrl || siteConfig.url;
   return {
     rules: {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${siteConfig.url}/sitemap.xml`,
-    host: siteConfig.url,
+    ...(origin ? { sitemap: `${origin}/sitemap.xml`, host: origin } : {}),
   };
 }

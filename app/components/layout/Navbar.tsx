@@ -2,15 +2,19 @@
 
 import { useEffect, useEffectEvent, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, Search, ShoppingCart, User, X } from 'lucide-react';
-import { siteConfig } from '@/app/lib/site';
 import { useCart } from '@/app/components/cart/CartProvider';
+import type { StorefrontHome } from '@/services/storefront.service';
+import { siteConfig } from '@/app/lib/site';
 
-export default function Navbar() {
+export default function Navbar({ storefront }: { storefront: StorefrontHome }) {
   const [showBanner, setShowBanner] = useState(true);
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { itemCount } = useCart();
+  const businessName = storefront.store.name;
+  const navLinks = storefront.navigation.header.length ? storefront.navigation.header : siteConfig.navLinks;
 
   const handleScroll = useEffectEvent(() => {
     setIsSticky(window.scrollY > 40);
@@ -24,15 +28,16 @@ export default function Navbar() {
   return (
     <header className="relative z-40">
       {showBanner && (
-        <div className="flex h-[40px] items-center justify-between bg-amber-950 px-4 py-2 text-[11px] uppercase tracking-widest text-amber-100">
-          <span className="font-medium">Support {siteConfig.contact.phone}</span>
+        <div className="flex h-10 items-center justify-between bg-amber-950 px-4 py-2 text-[11px] uppercase tracking-widest text-amber-100">
+          <span className="font-medium">{storefront.announcement ? (storefront.announcement.showPhone && storefront.contact.phone ? `Support ${storefront.contact.phone}` : businessName) : `Support ${siteConfig.contact.phone}`}</span>
           <div className="hidden items-center gap-2 md:flex">
-            <span>
-              Sign up and <span className="font-bold">get 25% off</span>
-            </span>
-            <Link href="/shop" className="font-semibold hover:underline">
-              Shop offers
-            </Link>
+            {storefront.announcement ? <>
+              <span>{storefront.announcement.message}{storefront.announcement.highlight && <span className="font-bold"> {storefront.announcement.highlight}</span>}</span>
+              {storefront.announcement.linkHref && <Link href={storefront.announcement.linkHref} className="font-semibold hover:underline">{storefront.announcement.linkLabel || "Shop now"}</Link>}
+            </> : <>
+              <span>Sign up and <span className="font-bold">get 25% off</span></span>
+              <Link href="/shop" className="font-semibold hover:underline">Shop offers</Link>
+            </>}
           </div>
           <button type="button" onClick={() => setShowBanner(false)} aria-label="Close banner">
             <X size={16} />
@@ -54,17 +59,15 @@ export default function Navbar() {
           <Menu size={24} />
         </button>
 
-        <Link href="/" className="flex items-center gap-2" aria-label="Fashion SaaS home">
-          <div className="flex size-8 items-center justify-center rounded-full bg-amber-900">
-            <span className="text-sm font-bold text-white">F</span>
-          </div>
+        <Link href="/" className="flex items-center gap-2" aria-label={`${businessName} home`}>
+          {storefront.store.logoUrl ? <Image src={storefront.store.logoUrl} alt="" width={32} height={32} className="size-8 rounded-full object-contain" /> : <div className="flex size-8 items-center justify-center rounded-full bg-primary"><span className="text-sm font-bold text-white">{businessName.charAt(0)}</span></div>}
           <span className="text-xl font-bold uppercase tracking-tighter text-gray-900">
-            Fashion SaaS
+            {businessName}
           </span>
         </Link>
 
         <div className="hidden items-center gap-8 lg:flex">
-          {siteConfig.navLinks.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
@@ -76,7 +79,11 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-4 md:gap-6">
-          <button type="button" aria-label="Search" className="hidden sm:block">
+          <button
+            type="button"
+            aria-label="Search"
+            className="hidden sm:block"
+          >
             <Search size={20} />
           </button>
           <button type="button" aria-label="Account" className="hidden sm:block">
@@ -84,20 +91,22 @@ export default function Navbar() {
           </button>
           <Link href="/cart" aria-label="Cart" className="relative">
             <ShoppingCart size={20} />
-            <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-amber-900 text-[10px] text-white">
-              {itemCount}
-            </span>
+            {itemCount > 0 && (
+              <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+                {itemCount}
+              </span>
+            )}
           </Link>
         </div>
       </nav>
 
       <div
-        className={`fixed inset-0 z-[100] bg-black/50 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-100 bg-black/50 transition-opacity duration-300 ${
           isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         <div
-          className={`absolute left-0 top-0 h-full w-[80%] max-w-[300px] bg-white p-8 transition-transform duration-300 ease-in-out ${
+          className={`absolute left-0 top-0 h-full w-[80%] max-w-75 bg-white p-8 transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -111,7 +120,7 @@ export default function Navbar() {
           </button>
 
           <div className="mt-12 flex flex-col gap-6">
-            {siteConfig.navLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
@@ -125,7 +134,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {isSticky && <div className="h-[72px]" />}
+      {isSticky && <div className="h-18" />}
     </header>
   );
 }

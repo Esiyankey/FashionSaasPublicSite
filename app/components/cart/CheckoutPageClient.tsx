@@ -1,17 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import Image from 'next/image';
 import { ArrowLeft, CreditCard, Wallet } from 'lucide-react';
 import { useCart } from './CartProvider';
+import { useCreateOrder } from '@/hooks/mutations/useCreateOrder';
+import { StatusBadge } from '@/components/shared/StatusBadge';
+import type { ShippingAddress } from '@/types/order';
+import { ApiError } from '@/services/http-client';
+import { formatCurrency } from '@/lib/currency';
 
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(value);
-}
+const emptyAddress: ShippingAddress = {
+  fullName: '', email: '', street: '', apartment: '', city: '', state: '', zipCode: '', phone: '', country: '',
+};
 
 const paymentMethods = [
   { id: 'card', label: 'Card', icon: CreditCard },
@@ -20,36 +22,43 @@ const paymentMethods = [
 ] as const;
 
 export function CheckoutPageClient() {
-  const { items, subtotal, shipping, tax, total, clearCart } = useCart();
-  const [paymentMethod, setPaymentMethod] = useState<(typeof paymentMethods)[number]['id']>('card');
-  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const { items, subtotal, shipping, tax, total, currency, clearCart } = useCart();
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>(emptyAddress);
+  const createOrderMutation = useCreateOrder();
 
-  const orderMessage = useMemo(
-    () =>
-      isOrderPlaced
-        ? 'Order placed. This checkout is currently a UI flow, so no payment was processed.'
-        : null,
-    [isOrderPlaced],
-  );
+  const handlePlaceOrder = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createOrderMutation.mutate(
+      { items, shippingAddress, paymentMethod: 'cod' },
+      { onSuccess: () => clearCart() },
+    );
+  };
 
-  if (isOrderPlaced) {
+  if (createOrderMutation.isSuccess) {
+    const order = createOrderMutation.data;
+
     return (
       <section className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-center justify-center px-6 py-16 text-center">
-        <p className="text-sm font-bold uppercase tracking-[0.3em] text-amber-900">Order Confirmed</p>
+        <p className="text-sm font-bold uppercase tracking-[0.3em] text-primary">Order Confirmed</p>
         <h1 className="mt-4 text-4xl font-light">Your order is on its way.</h1>
-        <p className="mt-4 max-w-2xl  -2xl bg-emerald-50 px-5 py-4 text-sm leading-7 text-emerald-700">
-          {orderMessage}
+        <div className="mt-4 flex items-center gap-2">
+          <span className="text-xs uppercase tracking-widest text-foreground/50">Order {order.id}</span>
+          <StatusBadge status={order.status} />
+        </div>
+        <p className="mt-4 text-lg font-semibold">{formatCurrency(order.total, order.currency)}</p>
+        <p className="mt-4 max-w-2xl bg-emerald-50 px-5 py-4 text-sm leading-7 text-emerald-700">
+          Order placed. Payment is set to cash on delivery; no online payment was collected.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2  -full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             Continue Shopping
           </Link>
           <Link
             href="/cart"
-            className="inline-flex items-center gap-2  -full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
+            className="inline-flex items-center gap-2 border border-border px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
           >
             Back to Cart
           </Link>
@@ -61,18 +70,10 @@ export function CheckoutPageClient() {
   if (items.length === 0) {
     return (
       <section className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-center justify-center px-6 py-16 text-center">
-        <p className="text-sm font-bold uppercase tracking-[0.3em] text-amber-900">Checkout</p>
+        <p className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-primary">Checkout</p>
         <h1 className="mt-4 text-4xl font-light">Your cart is empty.</h1>
-        <p className="mt-4 max-w-lg text-sm leading-7 text-foreground/65">
-          Add at least one product before moving through checkout.
-        </p>
-        <Link
-          href="/shop"
-          className="mt-8 inline-flex items-center gap-2  -full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          <ArrowLeft className="size-4" />
-          Back to Shop
-        </Link>
+        <p className="mt-4 max-w-lg text-sm leading-7 text-foreground/65">Add at least one product before moving through checkout.</p>
+        <Link href="/shop" className="mt-8 inline-flex items-center gap-2 bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"><ArrowLeft className="size-4" />Back to Shop</Link>
       </section>
     );
   }
@@ -95,69 +96,48 @@ export function CheckoutPageClient() {
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-8">
-          <div className=" -[28px] border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+          <div className="border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
             <h2 className="text-2xl font-light">Shipping Address</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="First & Last Name" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Email Address" />
-              <input className="md:col-span-2  -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Street Address" />
-              <input className="md:col-span-2  -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Apartment, suite, etc." />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="City" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="State" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Zip Code" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Phone Number" />
-            </div>
+            <form id="checkout-form" onSubmit={handlePlaceOrder} className="mt-6 grid gap-4 md:grid-cols-2">
+              {([['fullName', 'Full Name'], ['email', 'Email Address'], ['street', 'Street Address'], ['apartment', 'Apartment, suite, etc.'], ['city', 'City'], ['state', 'State'], ['zipCode', 'Zip Code'], ['phone', 'Phone Number'], ['country', 'Country']] as const).map(([key, label]) => (
+                <input key={key} name={key} type={key === 'email' ? 'email' : 'text'} required={key !== 'apartment'} value={shippingAddress[key] ?? ''} onChange={(event) => setShippingAddress((current) => ({ ...current, [key]: event.target.value }))} className="border border-border px-4 py-3 outline-none focus:border-primary" placeholder={label} />
+              ))}
+            </form>
           </div>
 
-          <div className=" -[28px] border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+          <div className="border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
             <h2 className="text-2xl font-light">Payment Method</h2>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
               {paymentMethods.map((method) => {
                 const Icon = method.icon;
-
-                return (
-                  <button
-                    key={method.id}
-                    type="button"
-                    onClick={() => setPaymentMethod(method.id)}
-                    className={` -[22px] border px-4 py-5 text-left transition-all ${
-                      paymentMethod === method.id
-                        ? 'border-sky-500 bg-sky-50 text-sky-700'
-                        : 'border-border bg-white hover:border-slate-300'
-                    }`}
-                  >
-                    <Icon className="size-5" />
-                    <p className="mt-4 text-sm font-semibold">{method.label}</p>
-                  </button>
-                );
+                const selected = method.id === 'cod';
+                return <button key={method.id} type="button" disabled={!selected} aria-pressed={selected}
+                  className={`border px-4 py-5 text-left transition-all ${selected ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-border bg-white text-slate-400'}`}>
+                  <Icon className="size-5" />
+                  <p className="mt-4 text-sm font-semibold">{method.label}</p>
+                </button>;
               })}
             </div>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <input className="md:col-span-2  -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Name on Card" />
-              <input className="md:col-span-2  -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="Card Number" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="MM / YY" />
-              <input className=" -2xl border border-border px-4 py-3 outline-none focus:border-amber-900" placeholder="CVV" />
-            </div>
+            <p className="mt-4 text-sm text-foreground/70">Cash on delivery. Online payment is not configured for this store.</p>
           </div>
         </div>
 
-        <aside className="h-fit  -[28px] border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+        <aside className="h-fit border border-border bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
           <h2 className="text-2xl font-light">Order Summary</h2>
 
           <div className="mt-6 space-y-4">
             {items.map((item) => (
-              <div key={item.cartItemId} className="flex items-center gap-4  -[22px] bg-secondary/65 p-3">
-                <div className="relative size-16 overflow-hidden  -[18px] bg-white">
+              <div key={item.cartItemId} className="flex items-center gap-4 bg-secondary/65 p-3">
+                <div className="relative size-16 overflow-hidden bg-white">
                   <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{item.name}</p>
                   <p className="text-xs text-foreground/60">
-                    {item.quantity} x {formatCurrency(item.price)}
+                    {item.quantity} x {formatCurrency(item.price, currency)}
                   </p>
                 </div>
-                <p className="text-sm font-semibold">{formatCurrency(item.price * item.quantity)}</p>
+                <p className="text-sm font-semibold">{formatCurrency(item.price * item.quantity, currency)}</p>
               </div>
             ))}
           </div>
@@ -165,32 +145,32 @@ export function CheckoutPageClient() {
           <div className="mt-6 space-y-3 border-t border-border pt-6 text-sm">
             <div className="flex items-center justify-between">
               <span className="text-foreground/60">Subtotal</span>
-              <span>{formatCurrency(subtotal)}</span>
+              <span>{formatCurrency(subtotal, currency)}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-foreground/60">Shipping</span>
-              <span>{shipping === 0 ? 'Free' : formatCurrency(shipping)}</span>
+              <span>{shipping === 0 ? 'Free' : formatCurrency(shipping, currency)}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-foreground/60">Tax</span>
-              <span>{formatCurrency(tax)}</span>
+              <span>{formatCurrency(tax, currency)}</span>
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4 text-base font-semibold">
               <span>Total</span>
-              <span>{formatCurrency(total)}</span>
+              <span>{formatCurrency(total, currency)}</span>
             </div>
+            <p className="text-xs text-foreground/60">Final shipping, tax, and total are calculated by the store when you place the order.</p>
           </div>
 
           <button
-            type="button"
-            onClick={() => {
-              setIsOrderPlaced(true);
-              clearCart();
-            }}
-            className="mt-8 w-full  -full bg-[linear-gradient(135deg,#4f46e5,#2563eb)] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+            type="submit"
+            form="checkout-form"
+            disabled={createOrderMutation.isPending}
+            className="mt-8 w-full bg-[linear-gradient(135deg,#4f46e5,#2563eb)] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Place Order
+            {createOrderMutation.isPending ? 'Placing Order...' : 'Place Order'}
           </button>
+          {createOrderMutation.error && <p role="alert" className="mt-3 text-sm text-red-700">{createOrderMutation.error instanceof ApiError ? createOrderMutation.error.message : 'Could not place the order. Please try again.'}</p>}
 
         </aside>
       </div>

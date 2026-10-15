@@ -9,13 +9,6 @@ const ProductSlider = dynamic(
   },
 );
 
-// const OutfitFinder = dynamic(
-//   () => import("@/app/components/OutfitFinder").then((mod) => mod.OutfitFinder),
-//   {
-//     loading: () => <SectionFallback title="Loading outfit finder..." />,
-//   },
-// );
-
 function SectionFallback({ title }: { title: string }) {
   return (
     <section
@@ -28,10 +21,5 @@ function SectionFallback({ title }: { title: string }) {
 }
 
 export function InteractiveShowcase() {
-  return (
-    <>
-      <ProductSlider />
-      
-    </>
-  );
+  return <ProductSlider />;
 }

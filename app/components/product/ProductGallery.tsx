@@ -24,31 +24,31 @@ export function ProductGallery({
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-[4/5] overflow-hidden  border border-border bg-secondary">
-        <Image
+      <div className="relative aspect-[4/5] overflow-hidden border border-border bg-secondary">
+        {images[selectedImage] ? <Image
           src={images[selectedImage]}
           alt={name}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover"
-        />
-        <button
+        /> : <div className="absolute inset-0 bg-gray-100" aria-label={`${name} image placeholder`} />}
+        {images.length > 1 && <button
           type="button"
           onClick={showPrevious}
           className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/85 p-2 transition-colors hover:bg-white"
           aria-label="Previous product image"
         >
           <ChevronLeft className="size-5 text-primary" />
-        </button>
-        <button
+        </button>}
+        {images.length > 1 && <button
           type="button"
           onClick={showNext}
           className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/85 p-2 transition-colors hover:bg-white"
           aria-label="Next product image"
         >
           <ChevronRight className="size-5 text-primary" />
-        </button>
+        </button>}
       </div>
 
       <div className="flex gap-3">
@@ -58,7 +58,7 @@ export function ProductGallery({
             type="button"
             onClick={() => setSelectedImage(index)}
             className={cn(
-              "relative h-20 w-20 overflow-hidden  border-2 transition-all",
+              "relative h-20 w-20 overflow-hidden border-2 transition-all",
               index === selectedImage
                 ? "border-accent"
                 : "border-border hover:border-accent/50",

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Heart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/app/lib/products-data";
+import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/app/components/cart/AddToCartButton";
+import { formatCurrency } from "@/lib/currency";
 
 const tabs = [
   { id: "description", label: "Description" },
@@ -17,6 +18,9 @@ type TabId = (typeof tabs)[number]["id"];
 export function ProductPurchasePanel({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState(product.availableSizes[0] ?? "One Size");
   const [selectedColor, setSelectedColor] = useState(product.availableColors[0] ?? "Default");
+  const selectedVariant = product.variants.find((variant) => variant.size === selectedSize && variant.color === selectedColor);
+  const displayPrice = selectedVariant?.price ?? product.price;
+  const compareAtPrice = selectedVariant?.compareAtPrice ?? product.originalPrice;
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<TabId>("description");
   const [wishlist, setWishlist] = useState(false);
@@ -28,20 +32,18 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           <h1 className="mb-4 text-4xl font-light text-balance">{product.name}</h1>
 
           <div className="mb-6 flex items-center gap-4 border-b border-border pb-6">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }, (_, index) => (
-                <Star
-                  key={index}
-                  className={cn(
-                    "size-4 transition-colors",
-                    index < Math.floor(product.rating)
-                      ? "fill-accent text-accent"
-                      : "text-border",
-                  )}
-                />
-              ))}
-            </div>
-            <span className="text-sm text-foreground/60">{product.rating} average rating</span>
+            {product.rating === null ? (
+              <span className="text-sm text-foreground/60">No reviews yet</span>
+            ) : (
+              <>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <Star key={index} className={cn("size-4 transition-colors", index < Math.floor(product.rating!) ? "fill-accent text-accent" : "text-border")} />
+                  ))}
+                </div>
+                <span className="text-sm text-foreground/60">{product.rating} average rating</span>
+              </>
+            )}
           </div>
 
           <p className="mb-6 leading-relaxed text-foreground/70">{product.description}</p>
@@ -107,7 +109,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
           </div>
 
           <div className="mb-6 flex items-center gap-4 border-b border-border pb-6">
-            <div className="flex items-center  border border-border">
+            <div className="flex items-center border border-border">
               <button
                 type="button"
                 onClick={() => setQuantity((current) => Math.max(1, current - 1))}
@@ -129,10 +131,10 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             <div className="flex-1 text-right">
               <p className="text-sm text-foreground/60">Price</p>
               <div className="flex items-baseline justify-end gap-2">
-                <span className="text-3xl font-light">${product.price}</span>
-                <span className="text-sm text-foreground/40 line-through">
-                  ${product.originalPrice}
-                </span>
+                <span className="text-3xl font-light">{formatCurrency(displayPrice, product.currency)}</span>
+                {compareAtPrice !== null && compareAtPrice > displayPrice && (
+                  <span className="text-sm text-foreground/40 line-through">{formatCurrency(compareAtPrice, product.currency)}</span>
+                )}
               </div>
             </div>
           </div>
@@ -144,6 +146,7 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
             quantity={quantity}
             size={selectedSize}
             color={selectedColor}
+            disabled={!product.inStock || (product.variants.length > 0 && (!selectedVariant || !selectedVariant.available))}
             className="h-auto w-full rounded-none bg-accent py-4 font-semibold tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
           >
             Add to Cart

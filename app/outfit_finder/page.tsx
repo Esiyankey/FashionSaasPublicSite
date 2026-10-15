@@ -1,6 +1,6 @@
 'use client'
 
-import { OutfitFinder } from "../components/OutfitFinder"
+import { OutfitFinder } from "../components/outfit-finder/OutfitFinder"
 
 
 

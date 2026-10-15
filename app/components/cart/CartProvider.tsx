@@ -8,31 +8,12 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import type { Product } from '@/app/lib/products-data';
+import type { AddToCartInput, CartItem } from '@/types/cart';
+import type { StorefrontHome } from '@/services/storefront.service';
 
 const CART_STORAGE_KEY = 'fashion-saas-cart';
-const SHIPPING_COST = 0;
-const TAX_RATE = 0.08;
 
-export type CartItem = {
-  cartItemId: string;
-  productId: number;
-  name: string;
-  image: string;
-  price: number;
-  originalPrice: number;
-  category: Product['category'];
-  size: string;
-  color: string;
-  quantity: number;
-};
-
-type AddToCartInput = {
-  product: Product;
-  quantity?: number;
-  size?: string;
-  color?: string;
-};
+export type { CartItem };
 
 type CartContextValue = {
   items: CartItem[];
@@ -41,6 +22,7 @@ type CartContextValue = {
   shipping: number;
   tax: number;
   total: number;
+  currency: string;
   addItem: (input: AddToCartInput) => void;
   updateItemQuantity: (cartItemId: string, quantity: number) => void;
   removeItem: (cartItemId: string) => void;
@@ -49,11 +31,11 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function buildCartItemId(productId: number, size: string, color: string) {
-  return `${productId}-${size}-${color}`;
+function buildCartItemId(productId: string, variantId: string | null, size: string, color: string) {
+  return `${productId}-${variantId ?? `${size}-${color}`}`;
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ children, commerce }: { children: ReactNode; commerce: StorefrontHome['commerce'] }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     if (typeof window === 'undefined') {
       return [];
@@ -66,7 +48,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      return JSON.parse(storedCart) as CartItem[];
+      const parsed = JSON.parse(storedCart) as Partial<CartItem>[];
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter((item): item is Partial<CartItem> & { productId: string } => typeof item.productId === 'string')
+        .map((item) => ({
+          ...item,
+          variantId: typeof item.variantId === 'string' ? item.variantId : null,
+          currency: item.currency || commerce.currency,
+        } as CartItem));
     } catch {
       window.localStorage.removeItem(CART_STORAGE_KEY);
       return [];
@@ -80,8 +70,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextValue>(() => {
     const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-    const shipping = items.length > 0 ? SHIPPING_COST : 0;
-    const tax = subtotal * TAX_RATE;
+    // Display estimates only. The checkout API calculates the final totals.
+    const shipping = items.length === 0 ? 0 : commerce.freeShippingThreshold !== null && subtotal >= commerce.freeShippingThreshold ? 0 : commerce.shippingFlatRate;
+    const tax = subtotal * commerce.taxRatePercent / 100;
     const total = subtotal + shipping + tax;
 
     return {
@@ -91,10 +82,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       shipping,
       tax,
       total,
-      addItem: ({ product, quantity = 1, size, color }) => {
+      currency: commerce.currency,
+      addItem: ({ product, quantity = 1, size, color, variantId }) => {
         const resolvedSize = size ?? product.availableSizes[0] ?? 'One Size';
         const resolvedColor = color ?? product.availableColors[0] ?? 'Default';
-        const cartItemId = buildCartItemId(product.id, resolvedSize, resolvedColor);
+        const selectedVariant = variantId
+          ? product.variants.find((variant) => variant.id === variantId)
+          : product.variants.find((variant) => variant.size === resolvedSize && variant.color === resolvedColor);
+        const resolvedVariantId = selectedVariant?.id ?? null;
+        const cartItemId = buildCartItemId(product.id, resolvedVariantId, resolvedSize, resolvedColor);
 
         setItems((currentItems) => {
           const existingItem = currentItems.find((item) => item.cartItemId === cartItemId);
@@ -112,10 +108,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
             {
               cartItemId,
               productId: product.id,
+              variantId: resolvedVariantId,
               name: product.name,
               image: product.image,
-              price: product.price,
-              originalPrice: product.originalPrice,
+              price: selectedVariant?.price ?? product.price,
+              originalPrice: selectedVariant?.compareAtPrice ?? product.originalPrice,
+              currency: product.currency,
               category: product.category,
               size: resolvedSize,
               color: resolvedColor,
@@ -144,7 +142,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       },
       clearCart: () => setItems([]),
     };
-  }, [items]);
+  }, [items, commerce]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

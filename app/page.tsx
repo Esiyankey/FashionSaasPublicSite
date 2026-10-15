@@ -1,21 +1,19 @@
-import { CategoryCards } from "./components/CategorySection";
-import { Hero } from "./components/HeroBanner";
+import { CategoryCards } from "./components/home/CategorySection";
+import { Hero } from "./components/home/HeroBanner";
 import { InteractiveShowcase } from "./components/home/InteractiveShowcase";
-import { OutfitFinder } from "./components/OutfitFinder";
-import { createMetadata } from "./lib/site";
+import { OutfitFinder } from "./components/outfit-finder/OutfitFinder";
+import { getStorefrontHome } from "@/services/storefront.service";
 
-export const metadata = createMetadata({
-  title: "Modern Fashion Storefront",
-  description:
-    "Explore curated apparel, fast-loading product discovery, and editorial fashion content built with server-first rendering.",
-  path: "/",
-  keywords: ["fashion", "ecommerce", "style inspiration", "modern storefront"],
-});
+export async function generateMetadata() {
+  const { store } = await getStorefrontHome();
+  return { title: store.seo.title, description: store.seo.description };
+}
 
-export default function Home() {
+export default async function Home() {
+  const storefront = await getStorefrontHome();
   return (
     <>
-      <Hero />
+      <Hero storefront={storefront} />
       <CategoryCards />
       <InteractiveShowcase />
       <OutfitFinder/>
